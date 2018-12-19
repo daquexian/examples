@@ -164,7 +164,9 @@ def main_worker(gpu, ngpus_per_node, args):
             model.cuda()
         else:
             model = torch.nn.DataParallel(model).cuda()
-
+    batch = torch.empty(256, 3, 224, 224).cuda()                                                                                                      
+    model = torch.jit.trace(model, batch)
+    
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
